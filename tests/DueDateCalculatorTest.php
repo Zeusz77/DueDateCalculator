@@ -26,4 +26,12 @@ final class DueDateCalculatorTest extends TestCase
         );
     }
 
+    public function test_turnaround_over_not_whole_days(): void
+    {
+        $this->assertEquals(
+            "2016-10-18 16:48 Wed",
+            DueDateCalculator::calculate_due_date("2016-10-17 14:48:21", 10)
+        );
+    }
+
 }

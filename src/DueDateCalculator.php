@@ -15,18 +15,25 @@ final class DueDateCalculator
     public function calculate_due_date(string $date, int $turnaround) : string
     {
         $report_hour = (int)date("H", strtotime($date));
-        $report_minute = (int)date("i", strtotime($date));
 
         if(
             !(bool)strtotime($date) || $report_hour < 9 || $report_hour > 16
         ) throw new InvalidArgumentException('Date given was either invalid format or outside service hours!');
 
-        if($turnaround % 8 == 0){
-            $addable = sprintf("+%d day", $turnaround/8);
-        }else{
-            $addable = sprintf("+%d hour", $turnaround);
-        }
+        $final_date = strtotime($date);
         
-        return date("Y-m-d H:i D", strtotime( $addable, strtotime($date)));
+        while($turnaround > 0)
+        {
+            $current_hour = (int)date("H", $final_date);
+            $current_day = date("D", $final_date);
+            
+            if(
+                ($current_hour >= 9 && $current_hour <= 16) && ($current_day != 'Sat' && $current_day != 'Sun')
+            ) $turnaround--;
+
+            $final_date = strtotime("+1 hour", $final_date);
+        }
+
+        return date("Y-m-d H:i D", $final_date);
     }
 }
