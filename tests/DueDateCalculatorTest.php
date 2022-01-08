@@ -3,6 +3,13 @@ use PHPUnit\Framework\TestCase;
 
 final class DueDateCalculatorTest extends TestCase
 {
+    public function test_exception(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        DueDateCalculator::calculate_due_date("2016-10-17 8:48:21", 1);
+    }
+
     public function test_basic_assertion(): void
     {
         $this->assertEquals(
