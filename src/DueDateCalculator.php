@@ -19,7 +19,7 @@ final class DueDateCalculator
 
         // Exception handling
 
-        // Throws an exception is strtotime() returns with null, meaning it has failed to format the string.
+        // Throws an exception if strtotime returns with null, meaning it has failed to format the string.
         if(!strtotime($date))
         {
             throw new InvalidArgumentException('Date given was invalid format!');
