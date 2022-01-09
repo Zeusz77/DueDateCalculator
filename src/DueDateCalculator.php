@@ -27,6 +27,7 @@ final class DueDateCalculator
 
         $report_hour = (int)date("H", strtotime($date));
         $report_day = date("D", strtotime($date));
+        $report_minute = (int)date("i", strtotime($date));
         
         // Weekends are outside service hours.
         if(
@@ -38,7 +39,8 @@ final class DueDateCalculator
 
         // If the step above didn't raise an issue, checks, if the dateTime of the report falls inside service hours.
         if(
-            !($report_hour >= 9 && $report_hour < 17)
+            ($report_hour == 17 && $report_minute != 0)
+            || !($report_hour > 9 && $report_hour < 16)
         )
         {
             throw new InvalidArgumentException('Date given was outside service hours!');
@@ -54,10 +56,11 @@ final class DueDateCalculator
             
             $current_hour = (int)date("H", $final_date);
             $current_day = date("D", $final_date);
+            $current_minute = date("i", $final_date);
             
             // The turnaround is only decresade if it's a working hour on a non-weekend day.
             if(
-                ($current_hour >= 9 && $current_hour <= 16) && ($current_day != 'Sat' && $current_day != 'Sun')
+                !in_array($current_day, ['Sat', 'Sun']) && ($current_hour == 17 && $current_minute == 0) || ($current_hour >= 9 && $current_hour <= 16)
             )
             {
                 $turnaround--;

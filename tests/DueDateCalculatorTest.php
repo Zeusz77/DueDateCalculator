@@ -7,28 +7,28 @@ final class DueDateCalculatorTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
-        DueDateCalculator::calculate_due_date("2016-10-17 8:48:21", 1);
+        DueDateCalculator::calculate_due_date("2016-10-17 8:48", 1);
     }
 
     public function test_exception_late_report(): void
     {
         $this->expectException(InvalidArgumentException::class);
 
-        DueDateCalculator::calculate_due_date("2016-10-17 17:48:21", 1);
+        DueDateCalculator::calculate_due_date("2016-10-17 17:48", 1);
     }
 
     public function test_exception_weekend(): void
     {
         $this->expectException(InvalidArgumentException::class);
 
-        DueDateCalculator::calculate_due_date("2016-10-16 17:48:21", 1);
+        DueDateCalculator::calculate_due_date("2016-10-16 17:48", 1);
     }
 
     public function test_exception_wrong_format(): void
     {
         $this->expectException(InvalidArgumentException::class);
 
-        DueDateCalculator::calculate_due_date("2016-1017 848:21", 1);
+        DueDateCalculator::calculate_due_date("2016-1017 848", 1);
     }
 
     public function test_basic_assertion(): void
@@ -62,13 +62,28 @@ final class DueDateCalculatorTest extends TestCase
             DueDateCalculator::calculate_due_date("2016-10-17 14:48", 22)
         );
     }
-
-    public function test_long_turnaround(): void
+    
+    public function test_report_right_before_weekend(): void
     {
         $this->assertEquals(
-            "2016-11-24 09:48",
-            DueDateCalculator::calculate_due_date("2016-10-17 14:48", 219)
+            "2022-01-10 09:30",
+            DueDateCalculator::calculate_due_date("2022-01-07 16:30", 1)
         );
     }
 
+    public function test_report_right_before_next_month(): void
+    {
+        $this->assertEquals(
+            "2022-02-01 12:00",
+            DueDateCalculator::calculate_due_date("2022-01-31 15:00", 6)
+        );
+    }
+
+    public function test_report_right_before_non_office_hours(): void
+    {
+        $this->assertEquals(
+            "2022-02-01 15:00",
+            DueDateCalculator::calculate_due_date("2022-01-31 17:00", 6)
+        );
+    }
 }
