@@ -18,6 +18,8 @@ final class DueDateCalculator
     {
 
         // Exception handling
+
+        // Throws an exception is strtotime returns with null, meaning it has failed to format the string
         if(!strtotime($date))
         {
             throw new InvalidArgumentException('Date given was invalid format!');
@@ -26,6 +28,7 @@ final class DueDateCalculator
         $report_hour = (int)date("H", strtotime($date));
         $report_day = date("D", strtotime($date));
         
+        // Weekends are outside service hours
         if(
             in_array($report_day, ['Sat', 'Sun'])
         )
@@ -33,6 +36,7 @@ final class DueDateCalculator
             throw new InvalidArgumentException('Date given is a weekend!');
         } 
 
+        // If the step above didn't raise an issue, checks, if the dateTime of the report falls inside service hours.
         if(
             !($report_hour >= 9 && $report_hour < 17)
         )
@@ -45,13 +49,13 @@ final class DueDateCalculator
         
         while($turnaround > 0)
         {
-            // The turnaround is only decresade if it's a working hour on a non-weekend day
             
             $final_date = strtotime("+1 hour", $final_date);
             
             $current_hour = (int)date("H", $final_date);
             $current_day = date("D", $final_date);
-
+            
+            // The turnaround is only decresade if it's a working hour on a non-weekend day
             if(
                 ($current_hour >= 9 && $current_hour <= 16) && ($current_day != 'Sat' && $current_day != 'Sun')
             )
@@ -60,7 +64,7 @@ final class DueDateCalculator
             }
         }
 
-        // Returning the final date at an acceptable
+        // Returning the final date in Y-m-d H:i format. (this is what the test cases watch for, but can be modified freely. The test cases can be reworked to watch any accaptable format.)
         return date("Y-m-d H:i", $final_date);
     }
 }
