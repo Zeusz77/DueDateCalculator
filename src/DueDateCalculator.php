@@ -39,7 +39,29 @@ final class DueDateCalculator
         } 
 
         $final_date = strtotime($date);
-        
+
+        $days = $turnaround / 8;
+        $weeks = $days / 5;
+        $days = $days % 5;
+        $turnaround = $turnaround % 8;
+
+        $final_date = strtotime(sprintf("+%d week", $weeks) ,$final_date);
+
+        while($days > 0)
+        {
+            
+            $final_date = strtotime("+1 day", $final_date);
+            
+            $current_day = date("D", $final_date);
+            
+            if(
+                !in_array($current_day, ['Sat', 'Sun'])
+            )
+            {
+                $days--;
+            }
+        }
+
         while($turnaround > 0)
         {
             
