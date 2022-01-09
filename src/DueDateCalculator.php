@@ -12,14 +12,14 @@ final class DueDateCalculator
      * 
      * @return string
      * 
-     * @throws InvalidArgumentException In case the date is a weekend or is outside of service hours, or in case the given Date sting isn't in a valid date format.
+     * @throws InvalidArgumentException In case the date is a weekend or is outside of service hours, or in case the given Date string isn't in a valid date format.
      */
     public function calculate_due_date(string $date, int $turnaround) : string
     {
 
         // Exception handling
 
-        // Throws an exception is strtotime returns with null, meaning it has failed to format the string
+        // Throws an exception is strtotime() returns with null, meaning it has failed to format the string.
         if(!strtotime($date))
         {
             throw new InvalidArgumentException('Date given was invalid format!');
@@ -28,7 +28,7 @@ final class DueDateCalculator
         $report_hour = (int)date("H", strtotime($date));
         $report_day = date("D", strtotime($date));
         
-        // Weekends are outside service hours
+        // Weekends are outside service hours.
         if(
             in_array($report_day, ['Sat', 'Sun'])
         )
@@ -55,7 +55,7 @@ final class DueDateCalculator
             $current_hour = (int)date("H", $final_date);
             $current_day = date("D", $final_date);
             
-            // The turnaround is only decresade if it's a working hour on a non-weekend day
+            // The turnaround is only decresade if it's a working hour on a non-weekend day.
             if(
                 ($current_hour >= 9 && $current_hour <= 16) && ($current_day != 'Sat' && $current_day != 'Sun')
             )
