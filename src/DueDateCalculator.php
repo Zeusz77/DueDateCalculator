@@ -16,7 +16,6 @@ final class DueDateCalculator
      */
     public static function calculate_due_date(string $date, int $turnaround) : string
     {
-
         // Exception handling
 
         // Throws an exception if strtotime returns with null, meaning it has failed to format the string.
@@ -25,9 +24,8 @@ final class DueDateCalculator
             throw new InvalidArgumentException('Date given was invalid format!');
         }
 
-        $report_hour = (int)date("H", strtotime($date));
         $report_day = date("D", strtotime($date));
-        $report_minute = (int)date("i", strtotime($date));
+        $report_time = (int)(date("H", strtotime($date)) . date("i", strtotime($date)));
         
         // Weekends are outside service hours.
         if(
@@ -39,8 +37,7 @@ final class DueDateCalculator
 
         // If the step above didn't raise an issue, checks, if the dateTime of the report falls inside service hours.
         if(
-            ($report_hour == 17 && $report_minute != 0)
-            || !($report_hour > 9 && $report_hour < 16)
+            $report_time < 900 || $report_time > 1700
         )
         {
             throw new InvalidArgumentException('Date given was outside service hours!');
@@ -54,13 +51,13 @@ final class DueDateCalculator
             
             $final_date = strtotime("+1 hour", $final_date);
             
-            $current_hour = (int)date("H", $final_date);
             $current_day = date("D", $final_date);
-            $current_minute = date("i", $final_date);
+            $current_time = (int)(date("H", $final_date) . date("i", $final_date));
             
             // The turnaround is only decresade if it's a working hour on a non-weekend day.
             if(
-                !in_array($current_day, ['Sat', 'Sun']) && ($current_hour == 17 && $current_minute == 0) || ($current_hour >= 9 && $current_hour <= 16)
+                ($current_time > 900 && $current_time <= 1700) &&
+                !in_array($current_day, ['Sat', 'Sun'])
             )
             {
                 $turnaround--;

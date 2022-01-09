@@ -74,7 +74,7 @@ final class DueDateCalculatorTest extends TestCase
     public function test_report_right_before_next_month(): void
     {
         $this->assertEquals(
-            "2022-02-01 12:00",
+            "2022-02-01 13:00",
             DueDateCalculator::calculate_due_date("2022-01-31 15:00", 6)
         );
     }
