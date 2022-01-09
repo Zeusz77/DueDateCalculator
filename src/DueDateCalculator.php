@@ -16,9 +16,6 @@ final class DueDateCalculator
      */
     public static function calculate_due_date(string $date, int $turnaround) : string
     {
-        // Exception handling
-
-        // Throws an exception if strtotime returns with null, meaning it has failed to format the string.
         if(!strtotime($date))
         {
             throw new InvalidArgumentException('Date given was invalid format!');
@@ -27,7 +24,6 @@ final class DueDateCalculator
         $report_day = date("D", strtotime($date));
         $report_time = (int)(date("H", strtotime($date)) . date("i", strtotime($date)));
         
-        // Weekends are outside service hours.
         if(
             in_array($report_day, ['Sat', 'Sun'])
         )
@@ -35,7 +31,6 @@ final class DueDateCalculator
             throw new InvalidArgumentException('Date given is a weekend!');
         } 
 
-        // If the step above didn't raise an issue, checks, if the dateTime of the report falls inside service hours.
         if(
             $report_time < 900 || $report_time > 1700
         )
@@ -43,7 +38,6 @@ final class DueDateCalculator
             throw new InvalidArgumentException('Date given was outside service hours!');
         } 
 
-        // Solution
         $final_date = strtotime($date);
         
         while($turnaround > 0)
@@ -54,7 +48,6 @@ final class DueDateCalculator
             $current_day = date("D", $final_date);
             $current_time = (int)(date("H", $final_date) . date("i", $final_date));
             
-            // The turnaround is only decresade if it's a working hour on a non-weekend day.
             if(
                 ($current_time > 900 && $current_time <= 1700) &&
                 !in_array($current_day, ['Sat', 'Sun'])
@@ -64,7 +57,6 @@ final class DueDateCalculator
             }
         }
 
-        // Returning the final date in Y-m-d H:i format. (this is what the test cases watch for, but can be modified freely. The test cases can be reworked to watch any accaptable format.)
         return date("Y-m-d H:i", $final_date);
     }
 }
