@@ -52,5 +52,3 @@ final class DueDateCalculator
         return date("Y-m-d H:i", $final_date);
     }
 }
-
-echo DueDateCalculator::calculate_due_date("2016-10-17 16:59", 1);
