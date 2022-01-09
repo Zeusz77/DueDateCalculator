@@ -14,7 +14,7 @@ final class DueDateCalculator
      * 
      * @throws InvalidArgumentException In case the date is a weekend or is outside of service hours, or in case the given Date string isn't in a valid date format.
      */
-    public function calculate_due_date(string $date, int $turnaround) : string
+    public static function calculate_due_date(string $date, int $turnaround) : string
     {
 
         // Exception handling
