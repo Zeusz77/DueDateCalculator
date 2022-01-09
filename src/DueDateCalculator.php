@@ -2,6 +2,18 @@
 
 final class DueDateCalculator
 {
+    /**
+     * Get the date/time when an issue is resolved.
+     * 
+     * @author Áron Franta <aron.franta@gmail.com>
+     * 
+     * @param string $date  The date when the issue is reported.
+     * @param int $turnaround The resolution time of the issue in hours.
+     * 
+     * @return string
+     * 
+     * @throws InvalidArgumentException In case the date is a weekend or is outside of service hours, or in case the given Date sting isn't in a valid date format.
+     */
     public function calculate_due_date(string $date, int $turnaround) : string
     {
 
