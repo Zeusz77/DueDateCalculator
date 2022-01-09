@@ -62,13 +62,13 @@ final class DueDateCalculatorTest extends TestCase
             DueDateCalculator::calculate_due_date("2016-10-17 14:48", 22)
         );
     }
-/*
+
     public function test_long_turnaround(): void
     {
         $this->assertEquals(
-            "2016-11-24 9:48",
+            "2016-11-24 09:48",
             DueDateCalculator::calculate_due_date("2016-10-17 14:48", 219)
         );
-    }*/
+    }
 
 }

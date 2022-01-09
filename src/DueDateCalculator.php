@@ -12,10 +12,17 @@ final class DueDateCalculator
         }
 
         $report_hour = (int)date("H", strtotime($date));
-        $report_day = (int)date("D", strtotime($date));
+        $report_day = date("D", strtotime($date));
         
         if(
-            ($report_hour < 9 || $report_hour > 16) || ($report_day != 'Sat' && $report_day != 'Sun')
+            in_array($report_day, ['Sat', 'Sun'])
+        )
+        {
+            throw new InvalidArgumentException('Date given is a weekend!');
+        } 
+
+        if(
+            !($report_hour >= 9 && $report_hour < 17)
         )
         {
             throw new InvalidArgumentException('Date given was outside service hours!');
@@ -26,21 +33,24 @@ final class DueDateCalculator
         
         while($turnaround > 0)
         {
+            // The turnaround is only decresade if it's a working hour on a non-weekend day
+            
+            $final_date = strtotime("+1 hour", $final_date);
+            
             $current_hour = (int)date("H", $final_date);
             $current_day = date("D", $final_date);
 
-            // The turnaround is only decresade if it's a working hour on a non-weekend day
             if(
-                ($current_hour > 8 && $current_hour < 17) && ($current_day != 'Sat' && $current_day != 'Sun')
+                ($current_hour >= 9 && $current_hour <= 16) && ($current_day != 'Sat' && $current_day != 'Sun')
             )
             {
                 $turnaround--;
             }
-
-            $final_date = strtotime("+1 hour", $final_date);
         }
 
         // Returning the final date at an acceptable
         return date("Y-m-d H:i", $final_date);
     }
 }
+
+echo DueDateCalculator::calculate_due_date("2016-10-17 16:59", 1);
