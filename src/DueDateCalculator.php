@@ -2,6 +2,29 @@
 
 final class DueDateCalculator
 {
+
+    private static function add_time(int $time_stamp, int $turnaround, string $unit = 'hour'): int
+    {
+        while($turnaround > 0)
+        {
+            
+            $time_stamp = strtotime("+1 " . $unit, $time_stamp);
+            
+            $current_day = date("D", $time_stamp);
+            $current_time = (int)(date("H", $time_stamp) . date("i", $time_stamp));
+            
+            if(
+                ($current_time > 900 && $current_time <= 1700) &&
+                !in_array($current_day, ['Sat', 'Sun'])
+            )
+            {
+                $turnaround--;
+            }
+        }
+
+        return $time_stamp;
+    }
+
     /**
      * Get the date/time when an issue is resolved.
      * 
@@ -47,37 +70,9 @@ final class DueDateCalculator
 
         $final_date = strtotime(sprintf("+%d week", $weeks) ,$final_date);
 
-        while($days > 0)
-        {
-            
-            $final_date = strtotime("+1 day", $final_date);
-            
-            $current_day = date("D", $final_date);
-            
-            if(
-                !in_array($current_day, ['Sat', 'Sun'])
-            )
-            {
-                $days--;
-            }
-        }
+        $final_date = DueDateCalculator::add_time($final_date, $days, "day");
 
-        while($turnaround > 0)
-        {
-            
-            $final_date = strtotime("+1 hour", $final_date);
-            
-            $current_day = date("D", $final_date);
-            $current_time = (int)(date("H", $final_date) . date("i", $final_date));
-            
-            if(
-                ($current_time > 900 && $current_time <= 1700) &&
-                !in_array($current_day, ['Sat', 'Sun'])
-            )
-            {
-                $turnaround--;
-            }
-        }
+        $final_date = DueDateCalculator::add_time($final_date, $turnaround, "hour");
 
         return date("Y-m-d H:i", $final_date);
     }
