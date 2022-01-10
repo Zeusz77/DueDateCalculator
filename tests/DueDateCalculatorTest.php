@@ -7,14 +7,14 @@ final class DueDateCalculatorTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
 
-        DueDateCalculator::calculate_due_date("2016-10-17 8:48", 1);
+        DueDateCalculator::calculate_due_date("2016-10-17 08:59", 1);
     }
 
     public function test_exception_late_report(): void
     {
         $this->expectException(InvalidArgumentException::class);
 
-        DueDateCalculator::calculate_due_date("2016-10-17 17:48", 1);
+        DueDateCalculator::calculate_due_date("2016-10-17 17:00", 1);
     }
 
     public function test_exception_weekend(): void
@@ -90,8 +90,32 @@ final class DueDateCalculatorTest extends TestCase
     public function test_report_right_before_non_office_hours(): void
     {
         $this->assertEquals(
-            "2022-02-01 15:00",
-            DueDateCalculator::calculate_due_date("2022-01-31 17:00", 6)
+            "2022-02-01 14:59",
+            DueDateCalculator::calculate_due_date("2022-01-31 16:59", 6)
         );
+    }
+
+    public function test_turnaround_over_new_years(): void
+    {
+        $this->assertEquals(
+          "2022-01-12 15:11",
+          DueDateCalculator::calculate_due_date("2021-12-31 9:11", 70)
+        );
+    }
+
+    public function test_one_day_task_over_new_years(): void
+    {
+        $this->assertEquals(
+            "2022-01-03 09:11",
+            DueDateCalculator::calculate_due_date("2021-12-31 09:11", 8)
+          );
+    }
+
+    public function test_one_day_task_nine_to_five(): void
+    {
+        $this->assertEquals(
+            "2022-01-03 09:00",
+            DueDateCalculator::calculate_due_date("2021-12-31 09:00", 8)
+          );
     }
 }

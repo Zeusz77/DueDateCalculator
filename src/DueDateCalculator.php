@@ -14,7 +14,7 @@ final class DueDateCalculator
             $current_time = (int)(date("H", $time_stamp) . date("i", $time_stamp));
             
             if(
-                ($current_time > 900 && $current_time <= 1700) &&
+                ($current_time >= 900 && $current_time < 1700) &&
                 !in_array($current_day, ['Sat', 'Sun'])
             )
             {
@@ -55,7 +55,7 @@ final class DueDateCalculator
         } 
 
         if(
-            $report_time < 900 || $report_time > 1700
+            !($report_time >= 900 && $report_time < 1700)
         )
         {
             throw new InvalidArgumentException('Date given was outside service hours!');

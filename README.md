@@ -12,6 +12,8 @@ Made by: Zeus
 
 I used the PHP Dependencie manager Coposer to install PHPUnit as a dependencied, PHPUnit 9.0.0 requires PHP 7.4.x or 7.4.x to work properly.
 
+I try to follow TDD as far as I could, by writing one test case at a time which breaks my function, and then implemented a solution for it, up to the point where I couldn't come up with a test case to break my code.
+
 # The Task
 
 ## Due Date Calculator
