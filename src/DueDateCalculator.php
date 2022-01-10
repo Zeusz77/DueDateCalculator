@@ -68,7 +68,7 @@ final class DueDateCalculator
         $days = $days % 5;
         $turnaround = $turnaround % 8;
 
-        $starting_date_plus_n_week = strtotime(sprintf("+%d week", $weeks) ,$$starting_date);
+        $starting_date_plus_n_week = strtotime(sprintf("+%d week", $weeks) ,$starting_date);
 
         $starting_date_plus_n_day = DueDateCalculator::add_time($starting_date_plus_n_week, $days, "day");
 
