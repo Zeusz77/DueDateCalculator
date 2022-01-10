@@ -61,18 +61,18 @@ final class DueDateCalculator
             throw new InvalidArgumentException('Date given was outside service hours!');
         } 
 
-        $final_date = strtotime($date);
+        $starting_date = strtotime($date);
 
         $days = $turnaround / 8;
         $weeks = $days / 5;
         $days = $days % 5;
         $turnaround = $turnaround % 8;
 
-        $final_date = strtotime(sprintf("+%d week", $weeks) ,$final_date);
+        $starting_date_plus_n_week = strtotime(sprintf("+%d week", $weeks) ,$$starting_date);
 
-        $final_date = DueDateCalculator::add_time($final_date, $days, "day");
+        $starting_date_plus_n_day = DueDateCalculator::add_time($starting_date_plus_n_week, $days, "day");
 
-        $final_date = DueDateCalculator::add_time($final_date, $turnaround, "hour");
+        $final_date = DueDateCalculator::add_time($starting_date_plus_n_day, $turnaround, "hour");
 
         return date("Y-m-d H:i", $final_date);
     }
