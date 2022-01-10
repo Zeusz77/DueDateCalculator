@@ -47,6 +47,14 @@ final class DueDateCalculatorTest extends TestCase
         );
     }
 
+    public function test_whole_day_turnaraound_over_a_weekend(): void
+    {
+        $this->assertEquals(
+            "2022-02-21 14:00",
+            DueDateCalculator::calculate_due_date("2022-02-14 14:00", 40)
+        );
+    }
+
     public function test_turnaround_over_not_whole_days(): void
     {
         $this->assertEquals(
